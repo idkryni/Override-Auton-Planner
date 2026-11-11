@@ -1,0 +1,66 @@
+{
+  "_comment": "VEX V5RC Override 2026-27 field layout (Appendix A, 2026-04-27). Inches. Origin = bottom-left corner from audience view, +X right, +Y toward far wall. Heading 0 deg = toward far wall, clockwise positive.",
+  "field_size": 140.41,
+  "tile_lines": [23.11, 46.66, 70.20, 93.75, 117.30],
+  "goals": [
+    {"x": 46.66, "y": 117.30, "color": "neutral", "type": "neutral", "preload": "yellow"},
+    {"x": 23.11, "y": 93.75, "color": "neutral", "type": "neutral", "preload": "yellow"},
+    {"x": 70.20, "y": 70.20, "color": "neutral", "type": "tall", "preload": "yellow"},
+    {"x": 117.30, "y": 46.66, "color": "neutral", "type": "neutral", "preload": "yellow"},
+    {"x": 93.75, "y": 23.11, "color": "neutral", "type": "neutral", "preload": "yellow"},
+    {"x": 93.75, "y": 117.30, "color": "blue", "type": "alliance"},
+    {"x": 117.30, "y": 93.75, "color": "blue", "type": "alliance"},
+    {"x": 23.11, "y": 46.66, "color": "red", "type": "alliance"},
+    {"x": 46.66, "y": 23.11, "color": "red", "type": "alliance"}
+  ],
+  "toggles": [
+    {"x": 70.20, "y": 140.41, "orientation": "horizontal"},
+    {"x": 70.20, "y": 0.0, "orientation": "horizontal"},
+    {"x": 0.0, "y": 70.20, "orientation": "vertical"},
+    {"x": 140.41, "y": 70.20, "orientation": "vertical"}
+  ],
+  "loaders": [
+    {"wall": "left", "y": 128.97, "color": "red"},
+    {"wall": "left", "y": 11.44, "color": "red"},
+    {"wall": "right", "y": 128.97, "color": "blue"},
+    {"wall": "right", "y": 11.44, "color": "blue"}
+  ],
+  "tape": [
+    {"name": "red load zone (far)", "color": "red", "points": [[0, 117.30], [11.56, 117.30], [11.56, 140.41]]},
+    {"name": "red load zone (near)", "color": "red", "points": [[0, 23.11], [11.56, 23.11], [11.56, 0]]},
+    {"name": "blue load zone (far)", "color": "blue", "points": [[140.41, 117.30], [128.85, 117.30], [128.85, 140.41]]},
+    {"name": "blue load zone (near)", "color": "blue", "points": [[140.41, 23.11], [128.85, 23.11], [128.85, 0]]},
+    {"name": "center diamond", "color": "white", "points": [[70.20, 93.75], [93.75, 70.20], [70.20, 46.66], [46.66, 70.20], [70.20, 93.75]]},
+    {"name": "autonomous line (far-left)", "color": "white", "double": true, "points": [[11.56, 128.85], [58.44, 81.97]]},
+    {"name": "autonomous line (near-right)", "color": "white", "double": true, "points": [[128.85, 11.56], [81.97, 58.44]]},
+    {"name": "diagonal (near-left)", "color": "white", "points": [[11.56, 11.56], [58.43, 58.43]]},
+    {"name": "diagonal (far-right)", "color": "white", "points": [[128.85, 128.85], [81.98, 81.98]]}
+  ],
+  "_objects_comment": "Head-to-head starting layout. Other match types may differ: edit freely. kind = pin | cup | pin_lying (lying pins have angle = direction the pin points).",
+  "objects": [
+    {"kind": "cup", "x": 43.50, "y": 138.83}, {"kind": "pin", "color": "yellow", "x": 46.66, "y": 138.83}, {"kind": "cup", "x": 49.82, "y": 138.83},
+    {"kind": "cup", "x": 90.59, "y": 138.83}, {"kind": "pin", "color": "yellow", "x": 93.75, "y": 138.83}, {"kind": "cup", "x": 96.91, "y": 138.83},
+    {"kind": "cup", "x": 43.50, "y": 1.58}, {"kind": "pin", "color": "yellow", "x": 46.66, "y": 1.58}, {"kind": "cup", "x": 49.82, "y": 1.58},
+    {"kind": "cup", "x": 90.59, "y": 1.58}, {"kind": "pin", "color": "yellow", "x": 93.75, "y": 1.58}, {"kind": "cup", "x": 96.91, "y": 1.58},
+    {"kind": "cup", "x": 1.58, "y": 43.50}, {"kind": "pin", "color": "yellow", "x": 1.58, "y": 46.66}, {"kind": "cup", "x": 1.58, "y": 49.82},
+    {"kind": "cup", "x": 1.58, "y": 90.59}, {"kind": "pin", "color": "yellow", "x": 1.58, "y": 93.75}, {"kind": "cup", "x": 1.58, "y": 96.91},
+    {"kind": "cup", "x": 138.83, "y": 43.50}, {"kind": "pin", "color": "yellow", "x": 138.83, "y": 46.66}, {"kind": "cup", "x": 138.83, "y": 49.82},
+    {"kind": "cup", "x": 138.83, "y": 90.59}, {"kind": "pin", "color": "yellow", "x": 138.83, "y": 93.75}, {"kind": "cup", "x": 138.83, "y": 96.91},
+
+    {"kind": "pin", "color": "yellow", "x": 117.30, "y": 117.30},
+    {"kind": "pin", "color": "yellow", "x": 93.75, "y": 93.75},
+    {"kind": "pin", "color": "yellow", "x": 46.66, "y": 46.66},
+    {"kind": "pin", "color": "yellow", "x": 23.11, "y": 23.11},
+    {"kind": "pin", "color": "blue", "x": 70.20, "y": 93.75},
+    {"kind": "pin", "color": "blue", "x": 93.75, "y": 70.20},
+    {"kind": "pin", "color": "red", "x": 46.66, "y": 70.20},
+    {"kind": "pin", "color": "red", "x": 70.20, "y": 46.66}
+  ],
+  "pin_crosses": [
+    {"x": 23.11, "y": 117.30},
+    {"x": 46.66, "y": 93.75},
+    {"x": 93.75, "y": 46.66},
+    {"x": 117.30, "y": 23.11}
+  ],
+  "pin_cross_layout": {"offset": 4.6, "center": "yellow", "N": "blue", "E": "blue", "S": "red", "W": "red"}
+}

@@ -1,0 +1,135 @@
+{
+  "name": "red_near_sample",
+  "notes": "Example route. Mechanism helpers are placeholders.",
+  "units": "in",
+  "frame": "origin bottom-left (audience view), heading 0 = far wall, CW+",
+  "waypoints": [
+    {
+      "x": 7.5,
+      "y": 35.1,
+      "heading": 90,
+      "reverse": false,
+      "curve": false,
+      "c1": null,
+      "c2": null,
+      "speed": 100.0,
+      "actions": []
+    },
+    {
+      "x": 23.11,
+      "y": 35.1,
+      "heading": null,
+      "reverse": false,
+      "curve": false,
+      "c1": null,
+      "c2": null,
+      "speed": 100.0,
+      "actions": [
+        {
+          "type": "intake_on",
+          "duration": 0.0,
+          "code": "intakeOn();"
+        }
+      ]
+    },
+    {
+      "x": 46.66,
+      "y": 46.66,
+      "heading": null,
+      "reverse": false,
+      "curve": false,
+      "c1": null,
+      "c2": null,
+      "speed": 100.0,
+      "actions": [
+        {
+          "type": "grab_pin",
+          "duration": 0.3,
+          "code": "grabPin();"
+        }
+      ]
+    },
+    {
+      "x": 23.11,
+      "y": 46.66,
+      "heading": null,
+      "reverse": true,
+      "curve": false,
+      "c1": null,
+      "c2": null,
+      "speed": 100.0,
+      "actions": []
+    },
+    {
+      "x": 46.66,
+      "y": 70.2,
+      "heading": null,
+      "reverse": false,
+      "curve": true,
+      "c1": [
+        34.209,
+        46.66
+      ],
+      "c2": [
+        38.81,
+        62.353
+      ],
+      "speed": 70,
+      "actions": [
+        {
+          "type": "grab_pin",
+          "duration": 0.3,
+          "code": "grabPin();"
+        }
+      ]
+    },
+    {
+      "x": 66.0,
+      "y": 70.2,
+      "heading": 90.0,
+      "reverse": false,
+      "curve": false,
+      "c1": null,
+      "c2": null,
+      "speed": 100.0,
+      "actions": [
+        {
+          "type": "score_goal",
+          "duration": 0.6,
+          "code": "scoreGoal();"
+        },
+        {
+          "type": "intake_off",
+          "duration": 0.0,
+          "code": "intakeOff();"
+        }
+      ]
+    },
+    {
+      "x": 70.2,
+      "y": 9.0,
+      "heading": null,
+      "reverse": false,
+      "curve": false,
+      "c1": null,
+      "c2": null,
+      "speed": 100.0,
+      "actions": [
+        {
+          "type": "flip_toggle",
+          "duration": 0.4,
+          "code": "flipToggle();"
+        }
+      ]
+    }
+  ],
+  "robot": {
+    "width": 15.0,
+    "length": 15.0,
+    "max_velocity": 60.0,
+    "max_acceleration": 120.0,
+    "max_angular_velocity": 360.0,
+    "max_angular_acceleration": 900.0,
+    "turn_threshold_deg": 3.0
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "_comment": "Default robot model used for drawing and time estimates. Edit to match your robot (or use Robot > Settings in the app).",
+  "width": 15.0,
+  "length": 15.0,
+  "max_velocity": 60.0,
+  "max_acceleration": 120.0,
+  "max_angular_velocity": 360.0,
+  "max_angular_acceleration": 900.0,
+  "turn_threshold_deg": 3.0
+}

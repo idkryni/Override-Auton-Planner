@@ -1,0 +1,12 @@
+{
+  "_comment": "Game element dimensions from VEX V5RC Override Appendix A (inches).",
+  "pin": {"height": 6.50, "base_diameter": 3.16, "mid_diameter": 2.35, "top_diameter": 1.40, "middle_height": 2.93, "cap_height": 0.64},
+  "cup": {"height": 6.48, "rim_diameter": 3.16, "waist_diameter": 2.32},
+  "goal": {
+    "base_width": 5.61, "top_width": 3.49, "hole_diameter": 2.37, "corner_radius": 3.22, "lip_height": 0.39,
+    "heights": {"alliance": 3.25, "neutral": 5.77, "tall": 8.77},
+    "tag_height": {"alliance": 1.49, "neutral": 2.52, "tall": 5.52}
+  },
+  "toggle": {"length": 25.99, "profile": 2.03, "pivot_offset": 1.19, "mount_height": 13.20},
+  "loader": {"tube_diameter": 3.39, "depth": 3.74, "base_width": 4.02, "height_low": 14.37, "height_high": 22.97, "base_height": 3.25}
+}
