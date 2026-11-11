@@ -9,6 +9,8 @@ GOAL_RADIUS = 2.8  # ~ half of the 5.61 in goal base
 
 def find_collisions(tl: Timeline, layout: dict, robot: RobotConfig, dt: float = 0.05) -> list[tuple[float, float, float, str]]:
     """Return (t, x, y, what) at the start of each collision interval."""
+    if not tl.phases:
+        return []
     size = layout["field_size"]
     goals = layout.get("goals", [])
     hits: list[tuple[float, float, float, str]] = []

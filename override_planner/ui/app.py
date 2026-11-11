@@ -16,13 +16,15 @@ from .dialogs import ExportDialog, RobotDialog
 from .field_canvas import FieldCanvas
 from .inspector import Inspector
 from .playback import Playback
+from .theme import Theme
 
 UNDO_LIMIT = 200
 
 
 class App:
-    def __init__(self, root: tk.Tk, route_file: Optional[str] = None) -> None:
+    def __init__(self, root: tk.Tk, route_file: Optional[str] = None, theme: str = "dark") -> None:
         self.root = root
+        self.theme = Theme(root, theme)
         self.layout = io.load_layout()
         self.elements = io.load_elements()
         self.robot = io.load_robot()
@@ -41,9 +43,11 @@ class App:
         self.show_footprints = tk.BooleanVar(value=True)
         self.check_collisions = tk.BooleanVar(value=True)
         self.snap_enabled = tk.BooleanVar(value=True)
-        self.snap_size = tk.DoubleVar(value=0.5)
+        self.snap_size = tk.StringVar(value="0.5")
+        self.light = tk.BooleanVar(value=theme == "light")
 
-        root.title("Override Auton Planner")
+        root.title("Override Planner")
+        root.minsize(1100, 720)
         self._build_menu()
         self._build_layout()
         self._bind_keys()
@@ -54,41 +58,58 @@ class App:
     # ---- layout ----------------------------------------------------------------
     def _build_layout(self) -> None:
         root = self.root
-        toolbar = ttk.Frame(root, padding=(6, 4))
-        toolbar.pack(fill="x")
-        ttk.Label(toolbar, text="Mode:").pack(side="left")
-        ttk.Radiobutton(toolbar, text="Add points (A)", value="add", variable=self.mode).pack(side="left")
-        ttk.Radiobutton(toolbar, text="Select / move (S)", value="select", variable=self.mode).pack(side="left")
-        ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=8)
-        ttk.Checkbutton(toolbar, text="Snap", variable=self.snap_enabled).pack(side="left")
-        ttk.Combobox(toolbar, textvariable=self.snap_size, values=[0.25, 0.5, 1, 2, 3, 6], width=4,
-                     state="readonly").pack(side="left")
-        ttk.Label(toolbar, text="in").pack(side="left")
-        ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=8)
-        ttk.Button(toolbar, text="Mirror red↔blue", command=self.mirror).pack(side="left")
-        ttk.Button(toolbar, text="Export…", command=lambda: self.export(next(iter(FORMATS)))).pack(side="left", padx=4)
-        ttk.Label(toolbar, text="Shift-drag a point to set heading · right-click for options",
-                  foreground="#666").pack(side="right")
+        bar = ttk.Frame(root, style="Bar.TFrame", padding=(16, 10))
+        bar.pack(fill="x")
+        ttk.Label(bar, text="Override Planner", style="Brand.TLabel").pack(side="left")
+        ttk.Label(bar, text="VEX V5RC 2026-27", style="Muted.TLabel").pack(side="left", padx=(10, 24), pady=(3, 0))
+        seg = ttk.Frame(bar, style="Bar.TFrame")
+        seg.pack(side="left")
+        for val, lbl in (("add", "Add points"), ("select", "Select")):
+            ttk.Radiobutton(seg, text=lbl, value=val, variable=self.mode, style="Seg.Toolbutton").pack(side="left")
+        snap = ttk.Frame(bar, style="Bar.TFrame")
+        snap.pack(side="left", padx=(16, 0))
+        ttk.Checkbutton(snap, text="Snap", variable=self.snap_enabled, style="Seg.Toolbutton").pack(side="left")
+        ttk.Combobox(snap, textvariable=self.snap_size, values=["0.25", "0.5", "1", "2", "3", "6"], width=5,
+                     state="readonly").pack(side="left", padx=(6, 0))
+        ttk.Label(snap, text="in", style="Muted.TLabel").pack(side="left", padx=(6, 0))
+        ttk.Button(bar, text="Export", style="Accent.TButton",
+                   command=lambda: self.export(next(iter(FORMATS)))).pack(side="right")
+        ttk.Button(bar, text="Mirror side", command=self.mirror).pack(side="right", padx=(0, 8))
+        ttk.Button(bar, text="Robot", style="Ghost.TButton", command=lambda: RobotDialog(self)).pack(
+            side="right", padx=(0, 8))
+        ttk.Separator(root).pack(fill="x")
+
+        # Bottom bars are packed before the body so they never get squeezed out.
+        foot = ttk.Frame(root, padding=(16, 4))
+        foot.pack(side="bottom", fill="x")
+        self.status = ttk.Label(foot, text="", style="Status.TLabel")
+        self.status.pack(side="left")
+        self.hint = ttk.Label(foot, text="Shift-drag to aim a point    Right-click for actions    Space plays",
+                              style="Status.TLabel")
+        self.hint.pack(side="right")
+        self.phase = ttk.Label(foot, text="", style="Status.TLabel")
+        self.phase.pack(side="right", padx=(0, 24))
+        self.playback = Playback(root, self)
+        self.playback.pack(side="bottom", fill="x")
+        ttk.Separator(root).pack(side="bottom", fill="x")
 
         body = ttk.Frame(root)
         body.pack(fill="both", expand=True)
-        size = max(520, min(820, root.winfo_screenheight() - 200))
-        self.canvas = FieldCanvas(body, self, size)
-        self.canvas.pack(side="left", fill="both", expand=True)
         self.inspector = Inspector(body, self)
         self.inspector.pack(side="right", fill="y")
-        self.playback = Playback(root, self)
-        self.playback.pack(fill="x")
-        self.status = ttk.Label(root, text="", anchor="w", padding=(6, 2), font=("TkFixedFont", 9))
-        self.status.pack(fill="x")
+        ttk.Separator(body, orient="vertical").pack(side="right", fill="y")
+        stage = ttk.Frame(body, style="Stage.TFrame")
+        stage.pack(side="left", fill="both", expand=True)
+        self.canvas = FieldCanvas(stage, self)
+        self.canvas.pack(fill="both", expand=True)
 
     def _build_menu(self) -> None:
         m = tk.Menu(self.root)
         f = tk.Menu(m, tearoff=0)
         f.add_command(label="New", accelerator="Ctrl+N", command=self.new)
-        f.add_command(label="Open…", accelerator="Ctrl+O", command=self.open)
+        f.add_command(label="Open...", accelerator="Ctrl+O", command=self.open)
         f.add_command(label="Save", accelerator="Ctrl+S", command=self.save)
-        f.add_command(label="Save As…", command=self.save_as)
+        f.add_command(label="Save as...", command=self.save_as)
         f.add_separator()
         f.add_command(label="Quit", command=self.quit)
         m.add_cascade(label="File", menu=f)
@@ -96,32 +117,44 @@ class App:
         e.add_command(label="Undo", accelerator="Ctrl+Z", command=self.undo)
         e.add_command(label="Redo", accelerator="Ctrl+Y", command=self.redo)
         e.add_separator()
-        e.add_command(label="Delete waypoint", accelerator="Del", command=lambda: self.delete_waypoint(self.selected))
-        e.add_command(label="Mirror red ↔ blue", command=self.mirror)
+        e.add_command(label="Delete point", accelerator="Del", command=lambda: self.delete_waypoint(self.selected))
+        e.add_command(label="Mirror to other side", command=self.mirror)
         e.add_command(label="Clear route", command=self.clear)
         starts = tk.Menu(e, tearoff=0)
         half = self.robot.length / 2
         for label, x, y, h in (
-            ("Red – left wall, near", half, 35.1, 90), ("Red – left wall, far", half, 105.3, 90),
-            ("Blue – right wall, near", FIELD_SIZE - half, 35.1, 270),
-            ("Blue – right wall, far", FIELD_SIZE - half, 105.3, 270),
+            ("Red, left wall, near", half, 35.1, 90), ("Red, left wall, far", half, 105.3, 90),
+            ("Blue, right wall, near", FIELD_SIZE - half, 35.1, 270),
+            ("Blue, right wall, far", FIELD_SIZE - half, 105.3, 270),
         ):
             starts.add_command(label=label, command=lambda x=x, y=y, h=h: self.set_start(x, y, h))
         e.add_cascade(label="Set start pose", menu=starts)
         m.add_cascade(label="Edit", menu=e)
         v = tk.Menu(m, tearoff=0)
-        v.add_checkbutton(label="Scoring objects (H2H layout)", variable=self.show_objects, command=self.redraw)
+        v.add_checkbutton(label="Scoring objects (head-to-head layout)", variable=self.show_objects,
+                          command=self.redraw)
         v.add_checkbutton(label="Robot footprints", variable=self.show_footprints, command=self.redraw)
-        v.add_checkbutton(label="Collision warnings", variable=self.check_collisions, command=self.changed)
+        v.add_checkbutton(label="Contact warnings", variable=self.check_collisions, command=self.changed)
+        v.add_separator()
+        v.add_checkbutton(label="Light theme", variable=self.light, command=self.toggle_theme)
         m.add_cascade(label="View", menu=v)
         r = tk.Menu(m, tearoff=0)
-        r.add_command(label="Robot settings…", command=lambda: RobotDialog(self))
+        r.add_command(label="Robot model...", command=lambda: RobotDialog(self))
         m.add_cascade(label="Robot", menu=r)
         x = tk.Menu(m, tearoff=0)
         for name in FORMATS:
-            x.add_command(label=name + "…", command=lambda n=name: self.export(n))
+            x.add_command(label=name + "...", command=lambda n=name: self.export(n))
         m.add_cascade(label="Export", menu=x)
         self.root.config(menu=m)
+
+    def toggle_theme(self) -> None:
+        self.theme.apply("light" if self.light.get() else "dark")
+        self._build_menu()
+        self.inspector.retheme()
+        self.changed(light=True, mark_dirty=False)
+
+    def set_phase(self, msg: str) -> None:
+        self.phase.configure(text=msg)
 
     def _bind_keys(self) -> None:
         r = self.root
@@ -145,7 +178,7 @@ class App:
     def snap(self, x: float, y: float) -> tuple[float, float]:
         if not self.snap_enabled.get():
             return x, y
-        s = float(self.snap_size.get()) or 0.5
+        s = float(self.snap_size.get() or 0.5) or 0.5
         return round(x / s) * s, round(y / s) * s
 
     def snapshot(self) -> None:
@@ -179,7 +212,7 @@ class App:
 
     def _update_title(self) -> None:
         name = self.path.name if self.path else "untitled"
-        self.root.title(f"Override Auton Planner — {name}{' *' if self.dirty else ''}")
+        self.root.title(f"{name}{' (edited)' if self.dirty else ''} - Override Planner")
 
     # ---- edit operations ------------------------------------------------------
     def add_at(self, x: float, y: float) -> None:

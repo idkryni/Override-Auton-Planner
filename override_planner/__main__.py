@@ -1,4 +1,4 @@
-"""Entry point: python -m override_planner [route.json]"""
+"""Entry point: python -m override_planner [route.json] [--light]"""
 from __future__ import annotations
 
 import sys
@@ -11,15 +11,10 @@ def main() -> None:
         sys.exit("Tkinter is required. On Linux install it with: sudo apt install python3-tk")
     from .ui.app import App
 
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
     root = tk.Tk()
-    try:
-        from tkinter import ttk
-        style = ttk.Style(root)
-        if "clam" in style.theme_names() and sys.platform.startswith("linux"):
-            style.theme_use("clam")
-    except tk.TclError:
-        pass
-    App(root, sys.argv[1] if len(sys.argv) > 1 else None)
+    root.geometry("1440x920")
+    App(root, args[0] if args else None, theme="light" if "--light" in sys.argv else "dark")
     root.mainloop()
 
 

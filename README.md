@@ -17,27 +17,28 @@ python -m override_planner
 python -m override_planner examples/red_near_sample.json
 ```
 
+Add `--light` for the light theme (also under **View > Light theme**).
 Linux without Tkinter: `sudo apt install python3-tk`.
 
 ## Using it
 
 | Action | How |
 |---|---|
-| Add waypoint | Mode **Add points** (key `A`), click the field. First point = start pose |
+| Add waypoint | **Add points** mode (key `A`), click the field. First point = start pose |
 | Move waypoint | Drag it (any mode). Arrow keys nudge by the snap size |
 | Set heading | **Shift-drag** from a waypoint, or type it in the inspector ("turn to heading") |
 | Reverse / curve | Right-click a waypoint, or the inspector checkboxes |
-| Bezier shape | Drag the purple handles of a curved segment. End handle sets the final heading |
+| Bezier shape | Drag the square handles of a curved segment. End handle sets the final heading |
 | Actions | Right-click → *Add action*, or the inspector's action panel (type, duration, C++ code) |
 | Speed limit | Inspector *Max speed %* (per segment into the waypoint) |
-| Mirror red ↔ blue | Toolbar / Edit menu |
+| Mirror red/blue | **Mirror side** in the top bar, or the Edit menu |
 | Playback | ▶ Play, scrub the slider, `Space` on the canvas |
 | Undo / redo | `Ctrl+Z` / `Ctrl+Y` |
 | Save / open | `.json` route files (also stores the robot settings) |
 
-Time estimates use a trapezoidal profile from **Robot → Robot settings** (size, max velocity/acceleration,
+Time estimates use a trapezoidal profile from **Robot** (top bar) (size, max velocity/acceleration,
 turn rate) plus action durations, compared to 15 s (match) or 60 s (skills).
-Red ✕ marks show where the robot footprint hits a wall or goal (toggle in **View**).
+Red X marks show where the robot footprint touches a wall or goal (toggle in **View**).
 
 ## Coordinates
 
